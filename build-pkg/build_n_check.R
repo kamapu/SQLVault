@@ -1,8 +1,3 @@
-# TODO:   Working script for testing the package 'taxlist'
-# 
-# Author: Miguel Alvarez
-################################################################################
-
 library(devtools)
 library(styler)
 
@@ -25,6 +20,9 @@ document()
 # Build and check package
 pkg_loc <- build(path = "build-pkg", args = "--resave-data")
 check_built(path = pkg_loc)
+
+# Post check
+install()
 
 # write manual
 build_manual(path = "build-pkg")
