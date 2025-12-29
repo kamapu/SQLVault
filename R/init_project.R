@@ -11,27 +11,37 @@
 #' @param dbname A character value with the name of the database to be updated.
 #' @param user A character value with the name of the user connecting the
 #' @param path A character value indicating the path for the new project.
-#' @param main_script A character value with the name of the template used as
-#'     main script in the project.
 #' @param remarks A character value describing the project.
+#' @param restore_from A character value. The path to the acummulated backups.
+#'     If not provided a warning as reminder will be retrieved.
+#' @param r_script A logical value indicating whether a template R script
+#'     should be included in the project or not. The default is 'TRUE'.
 #' @param rs_project A logical value indicating whether an R Studio project
 #'     should be initialized or not. This may be useful to proceed with the
-#'     ETL workflow in an own R Studio project.
+#'     ETL workflow in an own R Studio project. The default is 'FALSE'.
 #' @param overwrite A logical value indicating whether an existing homonymous
 #'     project should be overwritten or not.
-#' @param ... Further arguments passed to [divDB::do_backup()] and
-#'     [divDB::connect_db()] (for instance 'host' and 'port').
+#' @param ... Further arguments passed to [divDB::connect_db()],
+#'     [divDB::do_backup()] and [divDB::do_restore()] (for instance 'host' and
+#'     'port').
 #'
 #' @export
 init_project <- function(
-  dbname, user, path, main_script = "main-script", remarks = "",
+  dbname, user, path, remarks = "", restore_from, r_script = TRUE,
   rs_project = FALSE, overwrite = FALSE, ...
 ) {
-  # Remind user to restore in advance
-  message(paste0(
-    "Project initialized from your current database version.\n",
-    "Remember to restore your database from last backup in advance.\n"
-  ))
+  # Restore in advance
+  if (missing(restore_from)) {
+    warning(paste0(
+      "It is recommended to restore the database from the last ",
+      "backup.\n  Set 'restore_from' for it."
+    ))
+  } else {
+    divDB::do_restore(
+      dbname = dbname, user = user, filepath = restore_from,
+      ...
+    )
+  }
   # Check existing directory
   if (file.exists(path)) {
     if (overwrite) {
@@ -45,21 +55,6 @@ init_project <- function(
   }
   # Create new directory
   dir.create(path = path, recursive = TRUE)
-  # Retrieve password
-  password <- tryCatch(keyring::key_get(service = dbname, username = user),
-    error = function(e) {
-      stop(paste0(
-        "A password for database '", dbname, "' and user '", user,
-        "' is not yet set\n  Use credentials() to set it."
-      ))
-    }
-  )
-  password <- keyring::key_get(service = dbname, username = user)
-  # Do a backup
-  divDB::do_backup(
-    dbname = dbname, user = user, filepath = path,
-    f_timestamp = NULL, ...
-  )
   # Connect the database
   conn <- divDB::connect_db(dbname = dbname, user = user, ...)
   # Write a log file
@@ -73,9 +68,14 @@ init_project <- function(
   )
   yaml::write_yaml(log, file.path(path, "project.yaml"))
   # Copy templates
-  copy_template(file.path(path, "main-script.R"), main_script)
+  if (r_script) {
+    copy_template(file.path(path, "main-script.R"), "main-script")
+  }
   if (rs_project) {
-    copy_template(file.path(path, paste0(basename(path), ".Rproj")), "rs_project")
+    copy_template(
+      file.path(path, paste0(basename(path), ".Rproj")),
+      "rs_project"
+    )
   }
   # Save session info
   sessioninfo::session_info(to_file = file.path(path, "session-info-init.log"))

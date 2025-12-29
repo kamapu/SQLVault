@@ -7,8 +7,19 @@ source("lab/create-iris-db.R")
 devtools::install()
 library(SQLVault)
 
-# Project inside of lab
+# Project inside of lab (with warning message)
 unlink("lab/test-project", recursive = TRUE)
 
 init_project(path = "lab/test-project", dbname = "iris-db", user = "miguel",
     rs_project = TRUE)
+
+# Restore in advance
+unlink("lab/test-project", recursive = TRUE)
+
+init_project(path = "lab/test-project", dbname = "iris-db", user = "miguel",
+    rs_project = TRUE, restore_from = "lab/iris-backups")
+
+
+
+# Test working of taxlist::sort_backups() !!!
+

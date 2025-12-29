@@ -8,8 +8,9 @@ init_project(
   dbname,
   user,
   path,
-  main_script = "main-script",
   remarks = "",
+  restore_from,
+  r_script = TRUE,
   rs_project = FALSE,
   overwrite = FALSE,
   ...
@@ -22,20 +23,24 @@ init_project(
 
 \item{path}{A character value indicating the path for the new project.}
 
-\item{main_script}{A character value with the name of the template used as
-main script in the project.}
-
 \item{remarks}{A character value describing the project.}
+
+\item{restore_from}{A character value. The path to the acummulated backups.
+If not provided a warning as reminder will be retrieved.}
+
+\item{r_script}{A logical value indicating whether a template R script
+should be included in the project or not. The default is 'TRUE'.}
 
 \item{rs_project}{A logical value indicating whether an R Studio project
 should be initialized or not. This may be useful to proceed with the
-ETL workflow in an own R Studio project.}
+ETL workflow in an own R Studio project. The default is 'FALSE'.}
 
 \item{overwrite}{A logical value indicating whether an existing homonymous
 project should be overwritten or not.}
 
-\item{...}{Further arguments passed to \code{\link[divDB:do_backup]{divDB::do_backup()}} and
-\code{\link[divDB:connect_db]{divDB::connect_db()}} (for instance 'host' and 'port').}
+\item{...}{Further arguments passed to \code{\link[divDB:connect_db]{divDB::connect_db()}},
+\code{\link[divDB:do_backup]{divDB::do_backup()}} and \code{\link[divDB:do_backup]{divDB::do_restore()}} (for instance 'host' and
+'port').}
 }
 \description{
 A project folder will contain all necessary data and scripts needed to update

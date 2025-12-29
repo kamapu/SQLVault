@@ -1,6 +1,6 @@
 database: iris-db
 user: miguel
-initialized: 2025-12-29 07:47
+initialized: 2025-12-29 10:13
 dms: PostgreSQL 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled
   by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit
 server: 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
