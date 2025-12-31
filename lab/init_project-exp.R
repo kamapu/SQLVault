@@ -18,8 +18,3 @@ unlink("lab/test-project", recursive = TRUE)
 
 init_project(path = "lab/test-project", dbname = "iris-db", user = "miguel",
     rs_project = TRUE, restore_from = "lab/iris-backups")
-
-
-
-# Test working of taxlist::sort_backups() !!!
-

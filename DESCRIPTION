@@ -1,5 +1,5 @@
 Package: SQLVault
-Version: 0.0.1.9001
+Version: 0.0.1.9002
 Encoding: UTF-8
 Title: An ETL tool for R and Postgres
 Authors@R:
@@ -10,7 +10,7 @@ Depends:
 Imports:
     DBI,
     divDB,
-    keyring,
+    methods,
     sessioninfo,
     yaml,
     zip

@@ -59,6 +59,7 @@ init_project <- function(
   conn <- divDB::connect_db(dbname = dbname, user = user, ...)
   # Write a log file
   log <- list(
+    type = "SQLVault.project",
     database = dbname,
     user = user,
     initialized = format(Sys.time(), format = "%Y-%m-%d %H:%M"),
