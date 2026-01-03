@@ -1,9 +1,0 @@
-type: "SQLVault.project"
-database: iris-db
-user: miguel
-initialized: 2025-12-29 16:33
-dms: PostgreSQL 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled
-  by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit
-server: 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
-remarks: Completing iris table with full scientific names and author names.
-released: 2025-12-30 09:27
