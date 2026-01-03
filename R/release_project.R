@@ -155,7 +155,13 @@ release_project <- function(
   }
   # Indicate
   message(paste0(
-    "Project released as '",
-    file.path(normalizePath(path.expand(vault)), paste0(base_name, ".zip")), "'"
+    "Project successfully released! Check these destinations:\n",
+    "  SQL script for the update: '",
+    file.path(backup_path, paste0(base_name, ".sql")),
+    "'\n  Database backup: '",
+    file.path(backup_path, paste0(base_name, ".backup")),
+    "'\n  Project backup: '",
+    file.path(vault, paste0(base_name, ".zip")),
+    "'\n  Temporary project copy: '", project_path2
   ))
 }

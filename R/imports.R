@@ -3,5 +3,4 @@
 #' @importFrom sessioninfo session_info
 #' @importFrom yaml read_yaml write_yaml
 #' @importFrom zip zip
-#' @importMethodsFrom divDB as c
 NULL

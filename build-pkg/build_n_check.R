@@ -25,7 +25,7 @@ check_built(path = pkg_loc)
 # Post check -------------------------------------------------------------------
 lint_dir("R")
 
-install()
-
 # write manual
 build_manual(path = "build-pkg")
+
+install()
