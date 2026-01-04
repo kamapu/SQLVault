@@ -2,6 +2,7 @@
 
 S3method(print,backups_info)
 export(backups_info)
+export(build_db)
 export(copy_template)
 export(init_project)
 export(read_info)
