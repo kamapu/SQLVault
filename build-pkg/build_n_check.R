@@ -1,10 +1,6 @@
-# TODO:   Working script for testing the package 'taxlist'
-# 
-# Author: Miguel Alvarez
-################################################################################
-
 library(devtools)
 library(styler)
+library(lintr)
 
 # Clean session
 rm(list = ls())
@@ -26,5 +22,10 @@ document()
 pkg_loc <- build(path = "build-pkg", args = "--resave-data")
 check_built(path = pkg_loc)
 
+# Post check -------------------------------------------------------------------
+lint_dir("R")
+
 # write manual
 build_manual(path = "build-pkg")
+
+install()
