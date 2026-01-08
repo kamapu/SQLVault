@@ -12,6 +12,7 @@ release_project(
   f_timestamp = "\%Y\%m\%d-\%H\%M",
   restore = TRUE,
   delete_project,
+  version_table,
   ...
 )
 }
@@ -38,6 +39,10 @@ default setting.}
 \item{delete_project}{A logical value indicating whether the used folder
 project should be deleted after release or not. If not provided, it will
 be interactivelly prompted.}
+
+\item{version_table}{A character value with the name of the schema and the
+table containing the versions record. Not necessary if this table
+is missing in the database.}
 
 \item{...}{Further arguments passed to \code{\link[divDB:do_backup]{divDB::do_backup()}} and
 \code{\link[divDB:do_backup]{divDB::do_restore()}} (for instance 'host' and 'port').}
