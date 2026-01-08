@@ -57,6 +57,7 @@ init_project <- function(
   dir.create(path = path, recursive = TRUE)
   # Connect the database
   conn <- divDB::connect_db(dbname = dbname, user = user, ...)
+  on.exit(divDB::disconnect_db(conn), add = TRUE)
   # Write a log file
   log <- list(
     type = "SQLVault.project",

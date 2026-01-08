@@ -25,13 +25,16 @@
 #' @param delete_project A logical value indicating whether the used folder
 #'     project should be deleted after release or not. If not provided, it will
 #'     be interactivelly prompted.
+#' @param version_table A character value with the name of the schema and the
+#'     table containing the versions record. Not necessary if this table
+#'     is missing in the database.
 #' @param ... Further arguments passed to [divDB::do_backup()] and
 #'     [divDB::do_restore()] (for instance 'host' and 'port').
 #'
 #' @export
 release_project <- function(
   project_path, backup_path, vault, release_sql, f_timestamp = "%Y%m%d-%H%M",
-  restore = TRUE, delete_project, ...
+  restore = TRUE, delete_project, version_table, ...
 ) {
   # Get project metadata and tests
   project_files <- list.files(project_path, pattern = ".yaml")
@@ -89,12 +92,7 @@ release_project <- function(
     dbname = description$database,
     user = description$user
   )
-  divDB::dbSendQuery(conn, update_query)
-  # Produce a backup
-  divDB::do_backup(
-    dbname = description$database, user = description$user,
-    filepath = project_path2, filename = base_name, f_timestamp = NULL, ...
-  )
+  on.exit(divDB::disconnect_db(conn), add = TRUE)
   # Complete description
   description$released <- format(exec_time, format = "%Y-%m-%d %H:%M")
   description$backup <- paste0(base_name, ".backup")
@@ -104,6 +102,12 @@ release_project <- function(
     project_path2,
     "session-info-release.log"
   ))
+  divDB::dbSendQuery(conn, update_query)
+  # Produce a backup
+  divDB::do_backup(
+    dbname = description$database, user = description$user,
+    filepath = project_path2, filename = base_name, f_timestamp = NULL, ...
+  )
   # Prompt delete of project
   if (missing(delete_project)) {
     delete_project <- utils::askYesNo(paste0(
@@ -124,6 +128,14 @@ release_project <- function(
     ),
     "sql"
   )
+  # Append the version if required
+  if (!missing(version_table)) {
+    query <- divDB::insert_rows(
+      x = conn, y = as.data.frame(description),
+      name = version_table, eval = TRUE
+    )
+  }
+  update_query <- c(update_query, query)
   update_query[1] <- paste0(sql_head, update_query[1])
   divDB::write_sql(update_query, file = file.path(
     project_path2,
@@ -155,7 +167,7 @@ release_project <- function(
   }
   # Indicate
   message(paste0(
-    "Project successfully released! Check these destinations:\n",
+    "\nProject successfully released! Check these destinations:\n",
     "  SQL script for the update: '",
     file.path(backup_path, paste0(base_name, ".sql")),
     "'\n  Database backup: '",

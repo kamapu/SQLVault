@@ -1,5 +1,5 @@
 Package: SQLVault
-Version: 0.1.0
+Version: 0.1.1
 Encoding: UTF-8
 Title: An ETL workflow for R and Postgres
 Authors@R:
